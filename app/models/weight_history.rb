@@ -1,6 +1,8 @@
 class WeightHistory < ApplicationRecord
   belongs_to :user
 
+  before_validation :set_memo
+
   validates :user_id, presence: { message: "ユーザを入力してください"}
   validates :memo, length: { maximum: 255, too_long: "メモは最大%{count}文字以内で入力してください" }
   validate :weight_validate #カスタムのバリデーションはvalidatesではなくてvalidate
@@ -8,6 +10,14 @@ class WeightHistory < ApplicationRecord
   def weight_validate
     if weight < 1
       errors.add(:weight, "体重が正しくありません")
+    end
+  end
+
+  def set_memo
+    if memo.nil?
+      #modelの中で代入するときはselfが必要
+      #memo = "なし"だと代入はできていないことになる
+      self.memo = "なし"
     end
   end
 end
