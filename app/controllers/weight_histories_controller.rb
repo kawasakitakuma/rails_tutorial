@@ -23,14 +23,10 @@ class WeightHistoriesController < ApplicationController
   def create
     @weight_history = WeightHistory.new(weight_history_params)
 
-    respond_to do |format|
-      if @weight_history.save
-        format.html { redirect_to weight_history_url(@weight_history), notice: "Weight history was successfully created." }
-        format.json { render :show, status: :created, location: @weight_history }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @weight_history.errors, status: :unprocessable_entity }
-      end
+    if @weight_history.save
+      redirect_to weight_history_url(@weight_history), notice: "Weight history was successfully created."
+    else
+      render :new
     end
   end
 
